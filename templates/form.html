@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>智能客服</title>
+
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+   <link rel="stylesheet" href="../static/css/predict-form.css">
+{#    <link rel='stylesheet' href='../static/css/animate.min.css'>#}
+{#    <link rel="stylesheet" href="../static/css/style.css">#}
+
+{#    <link rel="stylesheet" href="../static/css/loading_style.css">#}
+{#    <script src='../static/js/react.min.js'></script>#}
+{#    <script src='../static/js/react-dom.min.js'></script>#}
+{#    <script src='../static/js/prop-types.js'></script>#}
+{#    <script src="../static/js/index.js"></script>#}
+
+</head>
+<body>
+
+<div id="form">
+    <form>
+        <input type="text" name="input" id="input">
+        <br/>   <br/>  <br/>
+        <button type="button" id="mybutton">Pos or Neg?</button>
+         <button type="button" id="mybutton2">what is the answer ?</button>
+    </form>
+        <br/>
+</div>
+
+
+<div>
+    <span id="message">
+
+    </span>
+</div>
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $("#image").hide();
+        $("#load").hide();
+        $("#analyse").hide();
+        $("#input").keydown(function (e) {
+            if (e.keyCode == "13"){
+                $("#load").show();
+                var input = $("#input").val();
+                $.get("/search",{'input':input},function (ret) {
+                    message = "错误";
+                    $("#load").hide();
+                    if (ret == "NEG"){
+                        $("#image").attr("src","../static/img/cry.png")
+                            .fadeIn();
+                    } else if (ret == "POS"){
+                        $("#image").attr("src","../static/img/smile.png")
+                            .fadeIn();
+                    } else {
+                        $('#output').text("空输入");
+                    }
+                    $("#image").fadeOut(3000);
+                })
+                return false;
+            }
+        })
+    })
+
+  $("#mybutton").click(function () {
+      var input = $("#input").val()
+
+      $.get("/search",{'input':input},function (data) {
+          console.log(data)
+         // $("#message").innerText = data
+          $("#message").append(data)
+      })
+  })
+
+    $("#mybutton2").click(function () {
+         var input = $("#input").val()
+         $.get("/searchForNine",{'input':input},function (data1) {
+           $("#message").append("      "+data1)
+             })
+    })
+
+</script>
+</body>
+</html>
